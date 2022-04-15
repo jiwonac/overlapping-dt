@@ -48,7 +48,7 @@ def data_generator(num_sources, distribution, costs, num_groups, group_dists):
 	# Now assign each string in a data source a group
 	for source in range(1, num_sources + 1):
 		group_dist = group_dists[source]
-		i = 0
+		i = 0 # Ordering is sequential
 		for group in range(num_groups):
 			for j in range(group_dist[group]):
 				dataset[source][i]["group"] = group
