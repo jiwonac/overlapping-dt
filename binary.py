@@ -86,13 +86,13 @@ if __name__ == "__main__":
 	# Generate dataset
 	num_sources = 2
 	distribution = {(1, -2): 70, (-1, 2): 70, (1, 2): 30}
-	costs = [None, 2.0, 1.0]
+	costs = [None, 1.0, 1.0]
 	num_groups = 2
-	group_dists = [None, (50, 50), (50, 50)]
+	group_dists = [None, (60, 40), (70, 30)]
 	dataset = data_generator(num_sources, distribution, costs, num_groups, group_dists)
 	#pp = pprint.PrettyPrinter(width=41, compact=True)
 	#pp.pprint(dataset)
-	costs = [0.0, 0.0, 0.0]
+	total_costs = [0.0, 0.0, 0.0]
 	n = 40
 	experiments = 3000
 	for i in range(experiments):
@@ -100,16 +100,16 @@ if __name__ == "__main__":
 		query = [n, n]
 		orig_unified_set, orig_total_cost, orig_total_sampling_attempts = binary_dt(dataset, query, "orig")
 		#print("orig: ", str(orig_total_cost), str(orig_total_sampling_attempts))
-		costs[0] += orig_total_cost
+		total_costs[0] += orig_total_cost
 
 		query = [n, n]
 		new_unified_set, new_total_cost, new_total_sampling_attempts = binary_dt(dataset, query, "1-p/1+p")
 		#print("new: ", str(new_total_cost), str(new_total_sampling_attempts))
-		costs[1] += new_total_cost
+		total_costs[1] += new_total_cost
 
 		query = [n, n]
 		random_unified_set, random_total_cost, random_total_sampling_attempts = binary_dt(dataset, query, "random")
 		#print("random: ", str(random_total_cost), str(random_total_sampling_attempts))
-		costs[2] += random_total_cost
-	costs = [x / experiments for x in costs]
-	print(costs)
+		total_costs[2] += random_total_cost
+	costs = [x / experiments for x in total_costs]
+	print(total_costs)
