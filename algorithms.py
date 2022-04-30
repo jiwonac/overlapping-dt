@@ -2,6 +2,7 @@ import random
 import pprint
 import math
 import pprint
+import sys
 from datagenerator import data_generator
 
 def argmin(iterable):
@@ -240,10 +241,10 @@ if __name__ == "__main__":
 			total_cost_sum = 0
 			for i in range(experiments): # Conduct experiment several times
 				query = [query_count, query_count]
-				unified_set, total_cost, sampling_attempts = general_dt(dataset, query, alg_type)
+				unified_set, total_cost, sampling_attempts = binary_dt(dataset, query, alg_type)
 				total_cost_sum += total_cost
 			results[alg_type].append(total_cost_sum / experiments)
-	print("Experiment 3: Five sources, binary groups equi-cost using general DT algorithm.")
+	print("Experiment 3: Five sources, binary groups equi-cost using binary DT algorithm.")
 	print("Query counts: ", query_counts)
 	pp.pprint(results)
 	print()
@@ -259,10 +260,49 @@ if __name__ == "__main__":
 			total_cost_sum = 0
 			for i in range(experiments): # Conduct experiment several times
 				query = [query_count, query_count]
+				unified_set, total_cost, sampling_attempts = binary_dt(dataset, query, alg_type)
+				total_cost_sum += total_cost
+			results[alg_type].append(total_cost_sum / experiments)
+	print("Experiment 4: Five sources, binary groups skewed-cost using binary DT algorithm.")
+	print("Query counts: ", query_counts)
+	pp.pprint(results)
+	print()
+
+	# Experiment 5: Five sources, 4 groups groups skewed-cost
+	costs = [None, 1.0, 1.25, 1.5, 1.75, 2.0]
+	group_dists = [None, (10, 20, 30, 40), (40, 30, 20, 10), (20, 20, 30, 30), (30, 30, 20, 20), (25, 25, 25, 25)]
+	dataset = data_generator(5, distribution, costs, 4, group_dists)
+	# Conduct experiment
+	query_counts = [5, 10, 20, 30, 40, 50]
+	results = {"orig": [], "ours": [], "random": []}
+	for alg_type in types: # For each type of algorithm
+		for query_count in query_counts: # For each query count
+			total_cost_sum = 0
+			for i in range(experiments): # Conduct experiment several times
+				query = [query_count, query_count, query_count, query_count]
 				unified_set, total_cost, sampling_attempts = general_dt(dataset, query, alg_type)
 				total_cost_sum += total_cost
 			results[alg_type].append(total_cost_sum / experiments)
-	print("Experiment 3: Five sources, binary groups skewed-cost using general DT algorithm.")
+	print("Experiment 5: Five sources, four groups skewed-cost using general DT algorithm.")
+	print("Query counts: ", query_counts)
+	pp.pprint(results)
+	print()
+
+	# Experiment 6: Five sources, 4 groups, equi-cost
+	costs = [None, 1.0, 1.0, 1.0, 1.0, 1.0]
+	dataset = data_generator(5, distribution, costs, 4, group_dists)
+	# Conduct experiment
+	query_counts = [5, 10, 20, 30, 40, 50]
+	results = {"orig": [], "ours": [], "random": []}
+	for alg_type in types: # For each type of algorithm
+		for query_count in query_counts: # For each query count
+			total_cost_sum = 0
+			for i in range(experiments): # Conduct experiment several times
+				query = [query_count, query_count, query_count, query_count]
+				unified_set, total_cost, sampling_attempts = general_dt(dataset, query, alg_type)
+				total_cost_sum += total_cost
+			results[alg_type].append(total_cost_sum / experiments)
+	print("Experiment 6: Five sources, four groups equi-cost using general DT algorithm.")
 	print("Query counts: ", query_counts)
 	pp.pprint(results)
 	print()
